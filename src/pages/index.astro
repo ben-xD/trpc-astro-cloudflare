@@ -42,6 +42,8 @@ console.log({ user });
 
 		document.querySelector("h1.user2")!.textContent = `Hello, ${user.name}`;
 		document.querySelector("h2.user2-id")!.textContent = userId;
-		document.querySelector("h2.user2-bio")!.textContent = user.bio;
+		if (user.bio) {
+			document.querySelector("h2.user2-bio")!.textContent = user.bio;
+		}
 	</script>
 </Layout>

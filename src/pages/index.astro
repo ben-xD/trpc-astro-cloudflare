@@ -1,13 +1,16 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { trpcClient } from "../ts/trpcClient";
+import { createTrpcClient } from "../ts/trpcClient";
 
 // Call tRPC from server side
-const userId = await trpcClient.createUser.mutate({
+console.log({origin: Astro.url.origin})
+const client = createTrpcClient(Astro.url.origin);
+const userId = await client.createUser.mutate({
 	name: "benbutterworth",
 	bio: "gardener",
 });
-const user = await trpcClient.getUserById.query(userId);
+const user = await client.getUserById.query(userId);
+
 // Logged server-side (in cloudflare)
 console.log({ user });
 ---
@@ -25,13 +28,15 @@ console.log({ user });
 	</main>
 	<script>
 		// Call tRPC from client side
-		import { trpcClient } from "../ts/trpcClient";
+		import { createTrpcClient } from "../ts/trpcClient";
+		console.log(`TRPC to origin: ${window.location.origin}`)
+		const client = createTrpcClient(window.location.origin)
 
-		const userId = await trpcClient.createUser.mutate({
+		const userId = await client.createUser.mutate({
 			name: "Anonymous",
 			bio: "Interwebs",
 		});
-		const user = await trpcClient.getUserById.query(userId)
+		const user = await client.getUserById.query(userId)
 		// Logged client-side (browser console).
 		console.log({ user });
 

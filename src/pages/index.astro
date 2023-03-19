@@ -6,7 +6,7 @@ import { createTrpcClient } from "../ts/trpcClient";
 console.log({origin: Astro.url.origin})
 const client = createTrpcClient(Astro.url.origin);
 const userId = await client.createUser.mutate({
-	name: "benbutterworth",
+	name: "Ben",
 	bio: "gardener",
 });
 const user = await client.getUserById.query(userId);
@@ -17,13 +17,9 @@ console.log({ user });
 
 <Layout title="Welcome to Astro.">
 	<main>
-    <p>Generated server-side:</p>
-		<h1>Welcome, {user.name}</h1>
-		<h2>User ID: {userId}</h2>
+		<h1>Generated server-side: {user.name}</h1>
 		<h2>User bio: {user.bio}</h2>
-		<p>Generated client-side:</p>
 		<h1 class="user2"></h1>
-		<h2 class="user2-id"></h2>
 		<h2 class="user2-bio"></h2>
 	</main>
 	<script>
@@ -40,10 +36,9 @@ console.log({ user });
 		// Logged client-side (browser console).
 		console.log({ user });
 
-		document.querySelector("h1.user2")!.textContent = `Hello, ${user.name}`;
-		document.querySelector("h2.user2-id")!.textContent = userId;
+		document.querySelector("h1.user2")!.textContent = `Generated client-side: ${user.name}`;
 		if (user.bio) {
-			document.querySelector("h2.user2-bio")!.textContent = user.bio;
+			document.querySelector("h2.user2-bio")!.textContent = `User bio: ${user.bio}`;
 		}
 	</script>
 </Layout>

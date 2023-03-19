@@ -2,10 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import { trpcClient } from "../ts/trpcClient";
 
-// Fix strong typing
-
 // Call tRPC from server side
-trpcClient.createUser.mutate()
 const userId = await trpcClient.createUser.mutate({
 	name: "benbutterworth",
 	bio: "gardener",

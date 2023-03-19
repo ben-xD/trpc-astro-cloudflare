@@ -7,10 +7,8 @@ export const trpcClient = createTRPCProxyClient<AppRouter>({
       // Warning: this probably needs to be updated when deployed. This only works in Cloudflare preview, since this URL
       // is the temporary local preview IP address.
       // Set this as an environment variable.
-      url: 'http://127.0.0.1:8788/api/trpc',
+      // TODO avoid passing the hostname, just use the same hostname
+      url: 'https://trpc-astro-cloudflare.pages.dev/api/trpc',
     }),
   ],
 });
-
-// Completion works here:
-const userId = trpcClient.createUser.mutate({name: , bio: });

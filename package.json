@@ -8,7 +8,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "cpreview": "astro build && wrangler pages dev ./dist"
+    "cpreview": "astro build && wrangler pages dev ./dist",
+    "deploy": "astro build && wrangler pages publish dist"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^6.2.1",

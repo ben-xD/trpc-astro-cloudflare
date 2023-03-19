@@ -1,0 +1,45 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { trpcClient } from "../ts/trpcClient";
+
+// Fix strong typing
+
+// Call tRPC from server side
+trpcClient.createUser.mutate()
+const userId = await trpcClient.createUser.mutate({
+	name: "benbutterworth",
+	bio: "gardener",
+});
+const user = await trpcClient.getUserById.query(userId);
+// Logged server-side (in cloudflare)
+console.log({ user });
+---
+
+<Layout title="Welcome to Astro.">
+	<main>
+    <p>Generated server-side:</p>
+		<h1>Welcome, {user.name}</h1>
+		<h2>User ID: {userId}</h2>
+		<h2>User bio: {user.bio}</h2>
+		<p>Generated client-side:</p>
+		<h1 class="user2"></h1>
+		<h2 class="user2-id"></h2>
+		<h2 class="user2-bio"></h2>
+	</main>
+	<script>
+		// Call tRPC from client side
+		import { trpcClient } from "../ts/trpcClient";
+
+		const userId = await trpcClient.createUser.mutate({
+			name: "Anonymous",
+			bio: "Interwebs",
+		});
+		const user = await trpcClient.getUserById.query(userId)
+		// Logged client-side (browser console).
+		console.log({ user });
+
+		document.querySelector("h1.user2")!.textContent = `Hello, ${user.name}`;
+		document.querySelector("h2.user2-id")!.textContent = userId;
+		document.querySelector("h2.user2-bio")!.textContent = user.bio;
+	</script>
+</Layout>

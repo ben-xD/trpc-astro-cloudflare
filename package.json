@@ -1,0 +1,24 @@
+{
+  "name": "trpc-astro-cloudflare",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "cpreview": "astro build && wrangler pages dev ./dist"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^6.2.1",
+    "@trpc/client": "^10.16.0",
+    "@trpc/server": "^10.16.0",
+    "astro": "^2.0.18",
+    "uuid": "^9.0.0",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "wrangler": "^2.12.3"
+  }
+}

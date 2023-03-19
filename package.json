@@ -16,10 +16,15 @@
     "@trpc/client": "^10.16.0",
     "@trpc/server": "^10.16.0",
     "astro": "^2.0.18",
+    "cloudflare-pages-plugin-trpc": "^0.3.2",
     "uuid": "^9.0.0",
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20230307.0",
+    "@databases/split-sql-query": "^1.0.3",
+    "@databases/sql": "^3.3.0",
+    "@types/uuid": "^9.0.1",
     "wrangler": "^2.12.3"
   }
 }

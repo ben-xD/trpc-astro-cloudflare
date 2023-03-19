@@ -10,7 +10,8 @@ const userId = await client.createUser.mutate({
 	bio: "gardener",
 });
 const user = await client.getUserById.query(userId);
-
+const users = await client.getUsers.query();
+console.log({users});
 // Logged server-side (in cloudflare)
 console.log({ user });
 ---

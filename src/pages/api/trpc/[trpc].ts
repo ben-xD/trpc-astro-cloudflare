@@ -1,8 +1,8 @@
 import { initTRPC } from '@trpc/server';
-import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
-import { Context, createContext } from './context';
+import { Context, createContext, Env } from './context';
 import { z } from 'zod';
-import type { APIRoute } from 'astro';
+import tRPCPlugin from "cloudflare-pages-plugin-trpc";
+
 type User = {
     id: string;
     name: string;
@@ -19,30 +19,34 @@ const appRouter = t.router({
     getUserById: t.procedure.input(z.string()).query(({ input }) => {
         return users[input]; // input type is string
     }),
+    getUsers: t.procedure.query(({ctx}) => {
+        const result = ctx.db.exec('SELECT * FROM users');
+        console.log({result});
+        return result;
+    }),
     createUser: t.procedure
-        // validate input with Zod
         .input(
             z.object({
                 name: z.string().min(3),
                 bio: z.string().max(142).optional(),
             }),
         )
-        .mutation(({ input }) => {
+        .mutation(({ input, ctx }) => {
             const id = Date.now().toString();
+            const statement = ctx.db.prepare("INSERT INTO users (id, title, body) VALUES (?, ?, ?)").bind(id, input.name, input.bio);
+            const result = statement.run();
+            console.log({result})
+
             const user: User = { id, ...input };
             users[user.id] = user;
             return id;
         })
 });
 
-// The Astro API route, handling all incoming HTTP requests.
-export const all: APIRoute = ({ request }) => {
-    return fetchRequestHandler({
-        req: request,
+export const all: PagesFunction<Env> = tRPCPlugin({
         endpoint: '/api/trpc',
         router: appRouter,
-        createContext
+        createContext,
     });
-};
 
 export type AppRouter = typeof appRouter;

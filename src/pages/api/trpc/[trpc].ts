@@ -9,7 +9,7 @@ type User = {
     bio?: string;
 };
 
-// This is lost between Cloudflare worker invocations.
+// Data in this object is lost between Cloudflare worker invocations. It's just to demonstrate a fake database.
 const users: Record<string, User> = {};
 
 // Inpsired by https://invertase.io/blog/astro-trpc-v10/ and https://trpc.io/docs/fetch

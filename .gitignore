@@ -23,3 +23,8 @@ pnpm-debug.log*
 # IDEs
 .idea
 .vscode
+
+# Cloudflare
+wrangler.toml
+.dev.vars
+.wrangler

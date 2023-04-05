@@ -3,24 +3,30 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
     "astro": "astro",
-    "cpreview": "astro build && wrangler pages dev ./dist",
-    "deploy": "astro build && wrangler pages publish dist"
+    "dev": "astro build && wrangler pages dev dist --live-reload=true --persist --d1=trpc-astro-cloudflare-template",
+    "dev2": "astro build && wrangler pages dev dist --local=false # THIS DOESN'T WORK, it's still local",
+    "deploy": "astro build && wrangler pages publish dist",
+    "tail": "wrangler pages deployment tail --project-name='trpc-astro-cloudflare'"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^6.2.1",
+    "@astrojs/react": "^2.1.1",
     "@trpc/client": "^10.16.0",
     "@trpc/server": "^10.16.0",
+    "@types/react": "^18.0.21",
+    "@types/react-dom": "^18.0.6",
     "astro": "^2.0.18",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
     "uuid": "^9.0.0",
     "zod": "^3.21.4"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20230321.0",
-    "wrangler": "^2.12.3"
+    "better-sqlite3": "8.0.1",
+    "wrangler": "^2.13.0"
   }
 }

@@ -1,26 +1,22 @@
 ---
+import UserList from "../components/Users";
 import Layout from "../layouts/Layout.astro";
 import { createTrpcClient } from "../ts/trpcClient";
 
 // Call tRPC from server side
 console.log({origin: Astro.url.origin})
 const client = createTrpcClient(Astro.url.origin);
-const userId = await client.createUser.mutate({
-	name: "Ben",
-	bio: "gardener",
-});
-const user = await client.getUserById.query(userId);
+const users = await client.getUsers.query();
 
 // Logged server-side (in cloudflare)
-console.log({ user });
+console.log({ users });
 ---
 
 <Layout title="Welcome to Astro.">
 	<main>
-		<h1>Generated server-side: {user.name}</h1>
-		<h2>User bio: {user.bio}</h2>
-		<h1 class="user2"></h1>
-		<h2 class="user2-bio"></h2>
+		<UserList users={users}/>
+		<button id="createUser">Create random user!</button>
+		<button id="deleteUsers">Delete all users</button>
 	</main>
 	<script>
 		// Call tRPC from client side
@@ -28,17 +24,26 @@ console.log({ user });
 		console.log(`TRPC to origin: ${window.location.origin}`)
 		const client = createTrpcClient(window.location.origin)
 
-		const userId = await client.createUser.mutate({
-			name: "Anonymous",
-			bio: "Interwebs",
-		});
-		const user = await client.getUserById.query(userId)
-		// Logged client-side (browser console).
-		console.log({ user });
-
-		document.querySelector("h1.user2")!.textContent = `Generated client-side: ${user.name}`;
-		if (user.bio) {
-			document.querySelector("h2.user2-bio")!.textContent = `User bio: ${user.bio}`;
+		const createUserOnClient = async () => {
+			const userId = await client.createUser.mutate({
+				name: "Anonymous",
+				bio: "Interwebs",
+			});
+			const user = await client.getUserById.query(userId)
+			// Logged client-side (browser console).
+			console.log({user});
 		}
+
+		  // Find all buttons with the `alert` class on the page.
+		  const button = document.getElementById('createUser');
+		  button?.addEventListener('click', () => {
+			// TODO update the SSr'd page client side. (users prop?)
+			createUserOnClient();
+		});
+
+		const deleteButton = document.getElementById('deleteUsers');
+		deleteButton?.addEventListener('click', async () => {
+			await client.deleteUsers.mutate();
+		})
 	</script>
 </Layout>

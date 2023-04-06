@@ -1,7 +1,7 @@
 interface User {
   id: string;
   name: string;
-  bio: string;
+  bio?: string;
 }
 
 interface UserListProps {

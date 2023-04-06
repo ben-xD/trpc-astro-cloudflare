@@ -1,9 +1,9 @@
 import { initTRPC } from '@trpc/server';
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
-import { Context, createContext } from '../context';
+import { Context, createContext } from '../../../ts/context';
 import { z } from 'zod';
 import type { APIRoute } from 'astro';
-import { trpcApiPath } from '../trpcPath';
+import { trpcApiPath } from '../../../ts/trpcPath';
 type User = {
     id: string;
     name: string;
@@ -43,9 +43,8 @@ const appRouter = t.router({
         }
     }),
     getUserById: t.procedure.input(z.string()).query(async ({ input, ctx }) => {
-        const result = await ctx.db.prepare('SELECT * FROM Users where UserID = ?1').bind(input).first();
-        // TODO parse into an object?
-        return result;
+        const result: UserDb = await ctx.db.prepare('SELECT * FROM Users where UserID = ?1').bind(input).first();
+        return {id: result.UserID, name: result.name, bio: result.bio};
     }),
     deleteUsers: t.procedure.mutation(async ({ctx}) => {
         await ctx.db.prepare('DELETE FROM Users').run();

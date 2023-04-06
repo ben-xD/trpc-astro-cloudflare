@@ -10,6 +10,7 @@ const users = await client.getUsers.query();
 
 // Logged server-side (in cloudflare)
 console.log({ users });
+console.log("HI")
 ---
 
 <Layout title="Welcome to Astro.">
@@ -31,7 +32,7 @@ console.log({ users });
 			});
 			const user = await client.getUserById.query(userId)
 			// Logged client-side (browser console).
-			console.log({user});
+			console.log(`Created user: ${JSON.stringify(user)}`)
 		}
 
 		  // Find all buttons with the `alert` class on the page.

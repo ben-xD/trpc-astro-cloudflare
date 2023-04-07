@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "start": "astro dev",
+    "prebuild": "npx ts-node --esm ./scripts/buildTrpcPanel.ts",
     "build": "astro build",
     "astro": "astro",
     "dev": "astro build && wrangler pages dev dist --live-reload=true --persist --d1=trpc-astro-cloudflare-template",
@@ -19,13 +20,17 @@
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
     "astro": "^2.0.18",
+    "cors": "^2.8.5",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
+    "trpc-panel": "^1.2.9",
     "uuid": "^9.0.0",
     "zod": "^3.21.4"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20230321.0",
+    "@types/cors": "^2.8.13",
+    "@types/node": "^18.15.11",
     "better-sqlite3": "8.0.1",
     "wrangler": "^2.13.0"
   }

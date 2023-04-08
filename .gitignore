@@ -28,3 +28,7 @@ pnpm-debug.log*
 wrangler.toml
 .dev.vars
 .wrangler
+
+# Generated files
+public/trpc/index.js
+src/pages/trpc/index.html

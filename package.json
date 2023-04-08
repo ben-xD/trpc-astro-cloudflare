@@ -7,8 +7,7 @@
     "prebuild": "npx ts-node --esm ./scripts/buildTrpcPanel.ts",
     "build": "astro build",
     "astro": "astro",
-    "dev": "astro build && wrangler pages dev dist --live-reload=true --persist --d1=trpc-astro-cloudflare-template",
-    "dev2": "astro build && wrangler pages dev dist --local=false # THIS DOESN'T WORK, it's still local",
+    "dev": "nodemon --exec 'astro build && wrangler pages dev dist --persist --d1=trpc-astro-cloudflare-template' --watch 'src' -e ts,tsx,astro",
     "deploy": "astro build && wrangler pages publish dist",
     "tail": "wrangler pages deployment tail --project-name='trpc-astro-cloudflare'"
   },
@@ -32,6 +31,7 @@
     "@types/cors": "^2.8.13",
     "@types/node": "^18.15.11",
     "better-sqlite3": "8.0.1",
+    "nodemon": "^2.0.22",
     "wrangler": "^2.13.0"
   }
 }

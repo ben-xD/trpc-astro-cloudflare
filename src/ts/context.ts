@@ -2,6 +2,7 @@ import type { inferAsyncReturnType } from '@trpc/server';
 import type { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
 import type { Env } from './worker-configuration';
 import { getRuntime } from "@astrojs/cloudflare/runtime";
+import { drizzle } from 'drizzle-orm/d1';
 
 export function createContext({
   req,
@@ -15,7 +16,7 @@ export function createContext({
   // You can read custom or pre-defined environmment variables with e.g. import.meta.env.MODE, .BASE_URL, .CUSTOM_VAR, etc. 
 
   const user = { name: req.headers.get('username') ?? 'anonymous' };
-  const db = runtime.env.DB;
+  const db = drizzle(runtime.env.DB);
   return { req, resHeaders, user, db };
 }
 export type Context = inferAsyncReturnType<typeof createContext>;

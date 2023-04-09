@@ -12,7 +12,7 @@ const splitTrpcPanelIntoIndexJsAndIndexHtml = () => {
     // Extract index.html from the file, because of a roll up error? See https://discord.com/channels/830184174198718474/1093693121755365486/1094065490088960131
     fs.readFile('src/pages/trpc/index.html', 'utf8', function (err, data) {
         if (err) {
-            return console.log(err);
+            return console.error(err);
         }
     
         // Extract the contents of the <script> tag

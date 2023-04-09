@@ -1,6 +1,9 @@
 import { initTRPC } from '@trpc/server';
 import { z } from 'zod';
-import type { Context } from './context.js';
+import { users } from '../db/schema/users';
+import type { Context } from './context';
+import { v4 as uuidv4 } from 'uuid';
+import { eq } from 'drizzle-orm/expressions';
 
 type User = {
     id: string;
@@ -37,31 +40,23 @@ const publicProcedure = t.procedure;
 export const appRouter = t.router({
     getUsers: publicProcedure.query(async ({ ctx }) => {
         try {
-            // When running locally, it seems to use the wrong database. My local database has a Users table
-            // See `wrangler d1 execute trpc-astro-cloudflare-template --command="SELECT name FROM sqlite_master WHERE type='table'" --local`.
-            // However, error is 
-            // {
-            //     message: 'D1_ERROR',
-            //     cause: 'Error: SqliteError: no such table: Users'
-            //   }
-            const stmt = ctx.db.prepare('SELECT * FROM Users LIMIT 10');
-            const { results } = await stmt.all<UserDb>();
-
-            return results?.map((user) => ({ id: user.UserID, name: user.name, bio: user.bio }));
+            return ctx.db.select().from(users).all();
         } catch (e: any) {
             console.log({
                 message: e.message,
                 cause: e.cause.message,
             });
-
         }
     }),
-    getUserById: publicProcedure.input(z.string()).query(async ({ input, ctx }) => {
-        const result: UserDb = await ctx.db.prepare('SELECT * FROM Users where UserID = ?1').bind(input).first();
-        return { id: result.UserID, name: result.name, bio: result.bio };
+    getUserById: publicProcedure.input(z.object({id: z.string()})).query(async ({ input, ctx }) => {
+        return ctx.db.select().from(users).where(eq(users.id, input.id)).get();
     }),
     deleteUsers: publicProcedure.mutation(async ({ ctx }) => {
-        await ctx.db.prepare('DELETE FROM Users').run();
+        const result = await ctx.db.delete(users).run();
+        console.log({result});
+    }),
+    deleteUser: publicProcedure.input(z.object({id: z.string()})).mutation(async ({ctx, input}) => {
+        await ctx.db.delete(users).where(eq(users.id, input.id)).run();
     }),
     createUser: publicProcedure
         // validate input with Zod
@@ -72,10 +67,15 @@ export const appRouter = t.router({
             }),
         )
         .mutation(async ({ input, ctx }) => {
-            const id = Date.now().toString();
-            const user: User = { id, ...input };
-            await ctx.db.prepare('INSERT INTO Users (UserID, name, bio) VALUES (?1, ?2, ?3);').bind(id, user.name, user.bio).run();
-            return id;
+            try {
+                const result = await ctx.db.insert(users).values({ id: uuidv4(), name: input.name, bio: input.bio }).returning({id: users.id}).get();
+                return result.id;
+            } catch (e: any) {
+                console.log({
+                    message: e.message,
+                    cause: e.cause.message,
+                });
+            }
         })
 });
 

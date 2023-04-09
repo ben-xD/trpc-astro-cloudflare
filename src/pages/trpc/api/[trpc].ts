@@ -1,8 +1,8 @@
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
-import { createContext } from '../../../ts/context.js';
+import { createContext } from '../../../ts/context';
 import type { APIRoute } from 'astro';
-import { trpcApiPath } from '../../../ts/trpcPath.js';
-import { appRouter } from '../../../ts/trpc.js';
+import { trpcApiPath } from '../../../ts/trpcPath';
+import { appRouter } from '../../../ts/trpc';
 
 // Explicitly handle options requests separately, since tRPC will reject them.
 export const options: APIRoute = async () => {

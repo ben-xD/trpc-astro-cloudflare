@@ -1,0 +1,12 @@
+{
+  "version": "5",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1681036209796,
+      "tag": "0000_closed_harrier"
+    }
+  ]
+}
